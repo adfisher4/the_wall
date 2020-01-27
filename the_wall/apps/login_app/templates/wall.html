@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Document</title>
+
+</head>
+
+<body>
+    <div class='container'>
+        <div class='row p-3 mb-2 bg-info text-white'>
+            <div class='col-8 mt-2'>
+                <h4>CodingDojo Wall</h4>
+            </div>
+            <div class="col-2 mt-2">
+                <p>Welcome {{request.session.first_name}}</p>
+
+            </div>
+            <div class="col-1 mt-1">
+                <form action="/logout_view" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" class="btn btn-link" value="log off">
+                </form>
+            </div>
+        </div>
+        <div class="row justify-content-around">
+            <form action="/message" method="POST">
+                {% csrf_token %}
+                <h5>Post a message</h5>
+                <textarea class="form-control" rows='3' cols='120' name="message" id=""></textarea>
+                <br>
+                <div class="d-flex justify-content-end"><input type="submit" class="btn btn-primary" name="submit"
+                        value="Post a message">
+                </div>
+                <br>
+            </form>
+
+        
+            <div class="row ml-5 border-bottom ">
+                <div class='col-10 p-3 mb-2 bg-light text-dark rounded-right'>
+                    {% for one_message in all_messages %}
+
+                    <p class="font-weight-bolder">{{one_message.creator.first_name}} {{one_message.creator.last_name}} -
+                        {{one_message.created_at}}</p>
+                    <div>
+                        <br>
+                        <p>{{one_message.key}}</p>
+                    </div>
+                    {% if one_message.creator == user_messages %}
+                    <div class="d-flex justify-content-end">
+                        <form action="/delete_message/{{one_message.id}}" method="POST">
+                            {% csrf_token %}
+                            <input type="submit" class="btn btn-link" name="submit" value="Delete comment">
+                    </div>
+                    <br>
+                    </form>
+                
+                    {% endif %}
+
+
+                <div class='row justify-content-around'>
+                    <div class='col-10'>
+                        {% for comment in one_message.comments_received.all %}
+                        <div class='border border-info rounded p-3'>
+                            <p class="font-weight-bolder">{{comment.creator.first_name}}
+                                {{comment.creator.last_name}} -
+                                {{comment.created_at}}</p>
+                            <div class="d-flex justify-content-around ">
+                                <p>{{comment.key}}</p>
+                            </div>
+                        </div>
+
+                        {% endfor %}
+                    
+                        <form action="/comment/{{one_message.id}}" method="POST">
+                            {% csrf_token %}
+                            <h6 class="mt-2">Post a comment</h6>
+                            <textarea class="form-control" rows='3' cols='120' name="comment" id=""></textarea>
+                            <br>
+                            <div class="d-flex justify-content-end"><input type="submit" class="btn btn-success"
+                                    name="submit" value="Post a comment">
+                            </div>
+                            <br>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            </div>
+        </div>
+
+
+
+
+
+
+    </div>
+</body>
+
+</html>

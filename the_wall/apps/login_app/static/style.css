@@ -1,0 +1,19 @@
+.my_row {
+    margin-top: 40px;
+}
+
+form {
+    width: 80%;
+    margin: auto;
+}
+
+li, p {
+    color: red ;
+    list-style: none;
+    text-align: center;
+
+}
+
+.login {
+    padding: 20px;
+}
